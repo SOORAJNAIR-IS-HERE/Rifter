@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./netnab.png" alt="Netnab Logo" width="650"/>
+  <img src="./Rifter.png" alt="Rifter Logo" width="650"/>
 </p>
 
 ---
