@@ -202,9 +202,7 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--hash_file", help="Path to file containing hashes to crack")
     parser.add_argument("-w", "--password_list", help="Path to password list")
     parser.add_argument("-P", type=int, default=4, help="Number of processes (default: 4)")
-    parser.add_argument("-A", "--hash_algorithm", choices=['md5', 'sha1', 'sha256', 'sha512', 'sha384', 'ripemd160', 'whirlpool', 'tiger', 'blake2', 'argon2', 'pbkdf2', 'hmac', 'bcrypt'], help="Hash algorithm (overrides auto-detection)")
-    parser.add_argument("-s", "--salt", help="Salt for salted hashes (for bcrypt or other salted hashes)")
-
+    parser.add_argument("-A", "--hash_algorithm", choices=['md5', 'sha1', 'sha256', 'sha512', 'sha384', ], help="Hash algorithm (overrides auto-detection)")
     args = parser.parse_args()
 
     if not args.hash and not args.hash_file:
