@@ -105,7 +105,7 @@ rifter <flags> <Hash file>
 
 -w  | Custom wordlist
 
--A  | Hash mode [md5, sha1, sha256, sha384, sha512]
+-A  | Hash Algorithms [md5, sha1, sha256, sha384, sha512]
 
 -P  | Number of Process
 
