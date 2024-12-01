@@ -23,7 +23,7 @@
 
 **[<kbd> <br> Install <br> </kbd>][Install]** 
 **[<kbd> <br> Usage <br> </kbd>][Usage]** 
-**[<kbd> <br> Categories <br> </kbd>][Categories]** 
+**[<kbd> <br> Categories <br> </kbd>][flags]** 
 **[<kbd> <br> ScreenShots <br> </kbd>][ScreenShots]** 
 **[<kbd> <br> Contributors <br> </kbd>][Contributors]**
 
@@ -31,7 +31,7 @@
 
 </div>
 
-[Categories]: #Categories
+[Flags]: #flags
 [Install]: #Installation
 [ScreenShots]: #ScreenShots
 [Contributors]: #Contributors
@@ -64,7 +64,68 @@
 To run Rifter, you need Python/Python3 installed. Clone the repository and install the required dependencies.
 
 **Clone the Repository:**
-```bash
-git clone https://github.com/SOORAJNAIR-IS-HERE/Rifter.git
- ```
+
+```python
+git clone https://github.com/SOORAJNAIR-IS-HERE/Headex.git
+```
+**Navigate to the Project Directory**
+
+```python
+cd Netnab
+```
+# Usage <a name="usage"></a>
+
+```python
+python netnab <Target>
+```
+## Running globally in Linux
+
+Move to bin Directory
+
+```python
+sudo mv netnab /usr/local/bin
+```
+```python
+netnab <Target>
+```
+
+**To scan Multiple Targets**
+
+```python
+netnab <Target> <Target>
+```
+## Flags <a name="flags"></a>
+
+```html
+
+-h  | help message
+
+-H  | Hash
+
+-f  | Hash file
+
+-w  | Custom wordlist
+
+-A  | Hash mode [md5, sha1, sha256, sha384, sha512]
+
+-P  | Number of Process
+
+-s  | Salted Hash
+
+```
+
+## Install the Required Dependencies
+
+**Update the package list**
+```python
+sudo apt update
+```
+**Install Python 3**
+```python
+sudo apt install python3
+```
+**Verify the installation**
+```python
+python3 --version
+```
 
