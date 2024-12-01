@@ -128,4 +128,17 @@ sudo apt install python3
 ```python
 python3 --version
 ```
+# output
+
+<p align="center">
+  <img src="./Output.png" alt="Output" width="750"/>
+</p>
+
+# output
+
+<p align="center">
+  <img src="./output.png" alt="Output" width="750"/>
+</p>
+
+
 
