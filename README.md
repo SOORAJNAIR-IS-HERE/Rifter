@@ -65,33 +65,33 @@ To run Rifter, you need Python/Python3 installed. Clone the repository and insta
 **Clone the Repository:**
 
 ```python
-git clone https://github.com/SOORAJNAIR-IS-HERE/Headex.git
+git clone https://github.com/SOORAJNAIR-IS-HERE/Riftergit
 ```
 **Navigate to the Project Directory**
 
 ```python
-cd Netnab
+cd Rifter
 ```
 ## Running globally in Linux
 
 Move to bin Directory
 
 ```python
-sudo mv netnab /usr/local/bin
+sudo mv rifter /usr/local/bin
 ```
 ```python
-netnab <Target>
+rifter <flags and Hash>
 ```
 
 # Usage <a name="usage"></a>
 
 ```python
-python netnab <Target>
+python rifter <flags and Hash>
 ```
-**To scan Multiple Targets**
+**To scan Multiple Hashes**
 
 ```python
-netnab <Target> <Target>
+rifter <flags> <Hash file>
 ```
 ## Flags <a name="flags"></a>
 
@@ -132,6 +132,7 @@ python3 --version
 <p align="center">
   <img src="./Output.png" alt="Output" width="750"/>
 </p>
+
 <p align="center">
   <img src="./output.png" alt="Output" width="750"/>
 </p>
