@@ -59,7 +59,7 @@
 
 ---
 
-## Installation <a name="installation"></a>
+## Installation on Linux <a name="installation"></a>
 
 To run Rifter, you need Python/Python3 installed. Clone the repository and install the required dependencies.
 
