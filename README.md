@@ -26,16 +26,16 @@
 **[<kbd> <br> Flags <br> </kbd>][flags]** 
 **[<kbd> <br> Output <br> </kbd>][output]** 
 
-
 ---
 
 </div>
 
 [Flags]: #flags
-[Install]: #Installation
-[Ouput]: #Output
-[Usage]: #Usage
+[Install]: #installation
+[Output]: #output
+[Usage]: #usage
 
+---
 
 ## Features
 **1. Multi-Algorithm Support**
