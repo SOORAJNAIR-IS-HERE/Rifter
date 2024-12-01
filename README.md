@@ -23,7 +23,7 @@
 
 **[<kbd> <br> Install <br> </kbd>][Install]** 
 **[<kbd> <br> Usage <br> </kbd>][Usage]** 
-**[<kbd> <br> Categories <br> </kbd>][flags]** 
+**[<kbd> <br> Flags <br> </kbd>][flags]** 
 **[<kbd> <br> ScreenShots <br> </kbd>][ScreenShots]** 
 **[<kbd> <br> Contributors <br> </kbd>][Contributors]**
 
