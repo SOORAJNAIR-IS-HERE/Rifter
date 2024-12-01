@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./Rifter.png" alt="Rifter Logo" width="650"/>
+  <img src="./Rifter.png" alt="Rifter Logo" width="750"/>
 </p>
 
 <p align="center">
@@ -42,8 +42,8 @@
 **1. Multi-Algorithm Support**
 - Supports popular hash algorithms, including MD5, SHA-1, SHA-256, and more.
 
-**2. Flexible Cracking Modes**
-- Supports dictionary-based cracking and brute-force attacks with customizable parameters.
+**2. Supported Hashes**
+- Md5, SHA1, SHA256, SHA384, SHA512.
 
 **3. Wordlist Customization**
 - Allows the use of custom wordlists to test against common and uncommon password patterns.
