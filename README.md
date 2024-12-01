@@ -80,14 +80,14 @@ Move to bin Directory
 ```python
 sudo mv netnab /usr/local/bin
 ```
-```python
-netnab <Target>
-```
 
 # Usage <a name="usage"></a>
 
 ```python
 python netnab <Target>
+```
+```python
+netnab <Target>
 ```
 
 **To scan Multiple Targets**
