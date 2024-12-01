@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+
+import argparse
+import hashlib
+import bcrypt
+import time
+from multiprocessing import Pool
+import json
+import os
+import pyfiglet
+from colorama import Fore, Style
+import re
+
+CYAN = Fore.CYAN  
+WHITE = Fore.WHITE  
+RED = Fore.RED  
+GREEN = Fore.LIGHTGREEN_EX
+ORANGE = '\033[38;5;214m'
+BLUE = Fore.BLUE
+RESET = Style.RESET_ALL
+
+CACHE_FILE = "cracked_cache.json"
+
+def print_banner():
+    """Print the tool banner with version information."""
+    banner = pyfiglet.figlet_format("Rifter")
+    print(f"{ORANGE}{banner}{Style.RESET_ALL}")
+
+def detect_hash_type(hash_string):
+    """Detect the hash type based on its length and pattern."""
+    hash_length = len(hash_string)
+    
+    # Detect MD5
+    if hash_length == 32 and re.match(r'^[a-fA-F0-9]{32}$', hash_string):
+        return "md5"
+    
+    # Detect SHA1
+    elif hash_length == 40 and re.match(r'^[a-fA-F0-9]{40}$', hash_string):
+        return "sha1"
+    
+    # Detect SHA256
+    elif hash_length == 64 and re.match(r'^[a-fA-F0-9]{64}$', hash_string):
+        return "sha256"
+    
+    # Detect SHA512
+    elif hash_length == 128 and re.match(r'^[a-fA-F0-9]{128}$', hash_string):
+        return "sha512"
+    
+    # Detect SHA384
+    elif hash_length == 96 and re.match(r'^[a-fA-F0-9]{96}$', hash_string):
+        return "sha384"
+
+    return None
+
+
+class HashCracker:
+    def __init__(self, target_hash=None, password_list=None, processes=4, hash_algorithm=None, salt=None, mask=None, hybrid_mode=False):
+        self.target_hash = target_hash
+        self.password_list = password_list
+        self.processes = processes
+        self.hash_algorithm = hash_algorithm.lower() if hash_algorithm else None
+        self.salt = salt
+        self.results = []
+        self.mask = mask
+        self.hybrid_mode = hybrid_mode
+        self.cracked_cache = self.load_cache()
+
+    def load_cache(self):
+        """Load the cache from the file."""
+        if os.path.exists(CACHE_FILE):
+            with open(CACHE_FILE, 'r') as f:
+                return json.load(f)
+        return {}
+
+    def save_cache(self):
+        """Save the cracked hashes to the cache file."""
+        with open(CACHE_FILE, 'w') as f:
+            json.dump(self.cracked_cache, f, indent=4)
+
+    def load_passwords(self):
+        """Load passwords from file or use default ones."""
+        default_passwords = ["admin", "password", "12345", "root"]
+        if not self.password_list:
+            return default_passwords
+
+        try:
+            with open(self.password_list, 'r', encoding='utf-8', errors='ignore') as p_file:
+                return [line.strip() for line in p_file]
+        except FileNotFoundError:
+            print(f"[!] Password file '{self.password_list}' not found. Using default passwords.")
+            return default_passwords
+
+    def hash_password(self, password):
+        """Hash a password using the detected or specified algorithm."""
+        if self.hash_algorithm == 'bcrypt':
+            salt = self.salt if self.salt else bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+            return hashed_password
+        elif self.hash_algorithm == 'md5':
+            return hashlib.md5(password.encode('utf-8')).hexdigest()
+        elif self.hash_algorithm == 'sha1':
+            return hashlib.sha1(password.encode('utf-8')).hexdigest()
+        elif self.hash_algorithm == 'sha256':
+            return hashlib.sha256(password.encode('utf-8')).hexdigest()
+        elif self.hash_algorithm == 'sha512':
+            return hashlib.sha512(password.encode('utf-8')).hexdigest()
+        elif self.hash_algorithm == 'sha384':
+            return hashlib.sha384(password.encode('utf-8')).hexdigest()
+        else:
+           print(f"[!] Unsupported hash algorithm: {self.hash_algorithm}")
+           return None
+
+    def hash_crack(self, passwords):
+        """Crack a hash by comparing candidate passwords."""
+        found = []
+        for password in passwords:
+            if self.hash_password(password) == self.target_hash:
+                found.append(password)
+        return found
+
+    def hash_crack_multiprocessing(self):
+        """Crack a hash using multiprocessing."""
+        if not self.target_hash:
+            print("[!] No hash provided to crack.")
+            return
+
+        # Check if hash is already cracked and available in cache
+        if self.target_hash in self.cracked_cache:
+            print(f"[+] Hash already cracked!!!")
+            self.results.append(self.cracked_cache[self.target_hash])
+            return
+
+        # Auto-detect the hash algorithm if not provided
+        if not self.hash_algorithm:
+            self.hash_algorithm = detect_hash_type(self.target_hash)
+            if not self.hash_algorithm:
+                print("[!] Unable to detect hash type. Provide the hash algorithm using -A.")
+                return
+
+        print(f"[+] Attempting to crack hash using {self.hash_algorithm.upper()}")
+        candidates = self.load_passwords()
+
+        # Use multiprocessing to speed up hash cracking
+        with Pool(processes=self.processes) as pool:
+            results = pool.map(self.hash_crack, [candidates[i::self.processes] for i in range(self.processes)])
+
+        # Flatten results
+        cracked_passwords = [item for sublist in results for item in sublist]
+
+        if cracked_passwords:
+            print(f"[+] Found: {Fore.LIGHTGREEN_EX}{', '.join(cracked_passwords)}{Fore.RESET}")
+            self.results.extend(cracked_passwords)
+
+            self.cracked_cache[self.target_hash] = cracked_passwords[0]
+            self.save_cache()
+        else:
+            print("[-] No matching password found.")
+
+    def save_results(self, output_file="cracked_passwords.json"):
+        """Save successful results to a file."""
+        with open(output_file, "w") as f:
+            json.dump(self.results, f, indent=4)
+        print(f"[+] Results saved to '{CYAN}{output_file}{RESET}'.")
+
+    def start(self, hash_file=None):
+        """Start the cracking process."""
+        hashes_to_crack = []
+
+        if hash_file:
+            try:
+                with open(hash_file, 'r', encoding='utf-8') as file:
+                    hashes_to_crack = [line.strip() for line in file if line.strip()]
+            except FileNotFoundError:
+                print(f"[!] Hash file '{hash_file}' not found.")
+                return
+        else:
+            hashes_to_crack = [self.target_hash]
+
+        for hash_value in hashes_to_crack:
+            self.target_hash = hash_value
+            self.hash_algorithm = detect_hash_type(self.target_hash)  # Auto-detect hash type
+            print(f"\n[+] Cracking hash...")
+            time.sleep(1)
+
+            self.hash_crack_multiprocessing()
+
+            time.sleep(2)
+
+        if self.results:
+            print(f"[+] Successful Results: {GREEN}{', '.join(self.results)}{RESET}")
+            time.sleep(3)
+            self.save_results()
+        else:
+            print("\n[-] No valid results found.")
+
+
+if __name__ == "__main__":
+    print_banner()  # Display the banner
+
+    parser = argparse.ArgumentParser(description="Optimized Hash Cracking Tool with Auto-Detection")
+    parser.add_argument("-H", "--hash", help="Hash to crack")
+    parser.add_argument("-f", "--hash_file", help="Path to file containing hashes to crack")
+    parser.add_argument("-w", "--password_list", help="Path to password list")
+    parser.add_argument("-P", type=int, default=4, help="Number of processes (default: 4)")
+    parser.add_argument("-A", "--hash_algorithm", choices=['md5', 'sha1', 'sha256', 'sha512', 'sha384', 'ripemd160', 'whirlpool', 'tiger', 'blake2', 'argon2', 'pbkdf2', 'hmac', 'bcrypt'], help="Hash algorithm (overrides auto-detection)")
+    parser.add_argument("-s", "--salt", help="Salt for salted hashes (for bcrypt or other salted hashes)")
+
+    args = parser.parse_args()
+
+    if not args.hash and not args.hash_file:
+        print("[!] Either a hash or a hash file must be provided.")
+        exit(1)
+
+    cracker = HashCracker(
+        target_hash=args.hash,
+        password_list=args.password_list,
+        processes=args.P,
+        hash_algorithm=args.hash_algorithm,
+        salt=args.salt
+    )
+    cracker.start(hash_file=args.hash_file)
