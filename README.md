@@ -24,8 +24,7 @@
 **[<kbd> <br> Install <br> </kbd>][Install]** 
 **[<kbd> <br> Usage <br> </kbd>][Usage]** 
 **[<kbd> <br> Flags <br> </kbd>][flags]** 
-**[<kbd> <br> ScreenShots <br> </kbd>][ScreenShots]** 
-**[<kbd> <br> Contributors <br> </kbd>][Contributors]**
+**[<kbd> <br> Output <br> </kbd>][output]** 
 
 ---
 
@@ -33,8 +32,7 @@
 
 [Flags]: #flags
 [Install]: #Installation
-[ScreenShots]: #ScreenShots
-[Contributors]: #Contributors
+[Ouput]: #Output
 [Usage]: #Usage
 
 
