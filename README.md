@@ -73,11 +73,6 @@ git clone https://github.com/SOORAJNAIR-IS-HERE/Headex.git
 ```python
 cd Netnab
 ```
-# Usage <a name="usage"></a>
-
-```python
-python netnab <Target>
-```
 ## Running globally in Linux
 
 Move to bin Directory
@@ -87,6 +82,12 @@ sudo mv netnab /usr/local/bin
 ```
 ```python
 netnab <Target>
+```
+
+# Usage <a name="usage"></a>
+
+```python
+python netnab <Target>
 ```
 
 **To scan Multiple Targets**
